@@ -70,6 +70,7 @@ try:
         file_path = Path(p) / \
                     f'{"".join([x if x.isalnum() or x in chars else "" for x in track.get("artists")[0]["name"]])} - ' \
                     f'{"".join([x if x.isalnum() or x in chars else "" for x in track.get("title", "Unknown")])}.mp3'
+        print(colorama.ansi.clear_line(2), end='\r')
         print(f'{i + 1:03}: {track.get("artists")[0]["name"]} - {track.get("title")}', end=' ')
         if not file_path.exists():
             if download:
@@ -82,10 +83,12 @@ try:
             else:
                 print(f'[{colorama.Fore.RED}NOT EXIST{colorama.Fore.RESET}]')
         else:
+            print(f'[{colorama.Fore.GREEN}OK{colorama.Fore.RESET}]', end='')
             if args.l:
-                print(f'[{colorama.Fore.GREEN}OK{colorama.Fore.RESET}]')
+                print()
             else:
-                print(colorama.ansi.clear_line(2), end='\r')
+                print('\r', end='')
+    print(colorama.ansi.clear_line(2))
 except KeyboardInterrupt:
     print(f'\n{colorama.Fore.LIGHTBLUE_EX}Exit...')
 finally:
