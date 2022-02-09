@@ -7,7 +7,7 @@ parser.add_argument('-l', action='store_true', help='Print all tracks')
 args = parser.parse_args()
 
 from yandex_music import Client
-from yandex_music.exceptions import Unauthorized, BadRequest
+from yandex_music.exceptions import Unauthorized, BadRequest, InvalidBitrate
 import json
 from pathlib import Path
 import colorama
@@ -75,7 +75,10 @@ try:
         if not file_path.exists():
             if download:
                 print(f'[{colorama.Fore.YELLOW}Downloading{colorama.Fore.RESET}]', end='')
-                short_track.fetchTrack().download(file_path, bitrate_in_kbps=320)
+                try:
+                    short_track.fetchTrack().download(file_path, bitrate_in_kbps=320)
+                except InvalidBitrate:
+                    short_track.fetchTrack().download(file_path, bitrate_in_kbps=192)
                 downloaded += 1
                 print(colorama.ansi.clear_line(2), end='\r')
                 print(f'{i + 1:03}: {track.get("artists")[0]["name"]} - {track.get("title")}',
